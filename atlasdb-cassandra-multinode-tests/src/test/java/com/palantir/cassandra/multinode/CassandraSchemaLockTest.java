@@ -59,7 +59,7 @@ import com.palantir.atlasdb.keyvalue.cassandra.CassandraKeyValueService;
 import com.palantir.atlasdb.keyvalue.cassandra.CassandraKeyValueServiceImpl;
 
 public class CassandraSchemaLockTest {
-    private static final int THREAD_COUNT = 4;
+    private static final int THREAD_COUNT = 10;
 
     @ClassRule
     public static final Containers CONTAINERS = new Containers(CassandraSchemaLockTest.class)
