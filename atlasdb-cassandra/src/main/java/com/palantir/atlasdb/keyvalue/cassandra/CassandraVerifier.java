@@ -238,8 +238,10 @@ public final class CassandraVerifier {
         clientPool.runWithRetry((FunctionCheckedException<CassandraClient, Void, TException>) client -> {
             KsDef originalKsDef = client.describe_keyspace(config.getKeyspaceOrThrow());
 
-            System.out.println(String.format("######### strategy class(%s): %s", Thread.currentThread().getName(), originalKsDef.getStrategy_class()));
-            System.out.println(String.format("######### ksdef(%s): %s", Thread.currentThread().getName(), originalKsDef));
+            System.out.println(String.format("######### strategy class(%s): %s", Thread.currentThread().getName(),
+                    originalKsDef.getStrategy_class()));
+            System.out.println(String.format("######### ksdef(%s): %s", Thread.currentThread().getName(),
+                    originalKsDef));
 
             // there was an existing keyspace
             // check and make sure it's definition is up to date with our config
@@ -250,7 +252,8 @@ public final class CassandraVerifier {
                     config);
 
             if (!modifiedKsDef.equals(originalKsDef)) {
-                System.out.println(String.format("######### modified ksdef(%s): %s", Thread.currentThread().getName(), modifiedKsDef));
+                System.out.println(String.format("######### modified ksdef(%s): %s", Thread.currentThread().getName(),
+                        modifiedKsDef));
                 // Can't call system_update_keyspace to update replication factor if CfDefs are set
                 modifiedKsDef.setCf_defs(ImmutableList.of());
                 client.system_update_keyspace(modifiedKsDef);
@@ -298,7 +301,8 @@ public final class CassandraVerifier {
         if (!config.ignoreNodeTopologyChecks()) {
             ksDef.setStrategy_class(CassandraConstants.NETWORK_STRATEGY);
             ksDef.setStrategy_options(ImmutableMap.of(Iterables.getOnlyElement(datacenters), "1"));
-            System.out.println(String.format("######### Setting network strategy on thread %s", Thread.currentThread().getName()));
+            System.out.println(String.format("######### Setting network strategy on thread %s",
+                    Thread.currentThread().getName()));
         }
         return ksDef;
     }
@@ -330,9 +334,11 @@ public final class CassandraVerifier {
 
     private static void checkRfsSpecified(CassandraKeyValueServiceConfig config, Set<String> dcs,
             Map<String, String> strategyOptions) {
-        System.out.println(String.format("######### strategy options(%s): %s", Thread.currentThread().getName(), strategyOptions));
+        System.out.println(String.format("######### strategy options(%s): %s", Thread.currentThread().getName(),
+                strategyOptions));
         for (String datacenter : dcs) {
-            System.out.println(String.format("######### datacenter(%s): %s", Thread.currentThread().getName(), datacenter));
+            System.out.println(String.format("######### datacenter(%s): %s", Thread.currentThread().getName(),
+                    datacenter));
             if (strategyOptions.get(datacenter) == null) {
                 logErrorOrThrow("The datacenter for this cassandra cluster is invalid. "
                         + " failed dc: " + datacenter + "  strategyOptions: " + strategyOptions,
